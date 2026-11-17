@@ -1,0 +1,10 @@
+# rendered videos, stills, caches
+out/
+__pycache__/
+*.pyc
+
+# large assets: downloaded/built by setup.sh
+assets/raw/
+assets/voice/
+assets/basemap_mercator.png
+assets/countries_*.pkl

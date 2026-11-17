@@ -1,0 +1,7 @@
+skia-python==144.1
+numpy>=2.0
+pillow>=11.0
+scipy>=1.14
+kokoro-onnx==0.6.1
+onnxruntime>=1.20
+soundfile>=0.12
