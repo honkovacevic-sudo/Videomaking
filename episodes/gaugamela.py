@@ -4,22 +4,21 @@ Run:
   python episodes/gaugamela.py                    # full MP4 -> out/gaugamela.mp4
   python episodes/gaugamela.py --stills 5,20,40   # PNG frames at those seconds
 
-Narration = the creator's script, word for word (VO dict below), one scene per paragraph.
+Narration = the creator's script (VO dict below), one scene per paragraph. The first five slides were
+condensed at the creator's request (v2); slides 6 onward are the script word for word.
 Scene lengths are estimates (~2.5 words/s); the framework re-times each slide to the real narration.
 
 FACTS USED BEYOND THE SCRIPT (re-check before publishing)
-  * 480 BCE: Xerxes' invasion; Athens burned (Acropolis sacked) in 480 BCE.
   * 336-335 BCE: Alexander secures Macedon and Greece; 334 BCE crossing at the Hellespont.
-  * Persia's Greek city-state rivals named on screen: Athens, Sparta (from script); member cities
-    shown on the League map: Athens, Sparta, Thebes, Corinth, Argos (Sparta never actually joined
-    the League; it appears only as a Greek city, not as a member).
+  * Greek cities shown as dots on the League map: Pella, Athens, Thebes, Corinth, Argos, Sparta
+    (Sparta never actually joined the League of Corinth, but sits inside the League ring).
   * Alexander's route 334-331: Granicus -> Issus -> Tyre -> Egypt (Memphis) -> back through Tyre -> Gaugamela.
   * Tyre's siege took about seven months (332 BCE) — on screen only as "332 BCE".
   * Gaugamela schematic: Parmenion commanded the Macedonian left; Alexander led the Companions on the right.
     Unit counts and positions are schematic, not to scale.
   * Persepolis burned in 330 BCE.
   * Persian Empire and Alexander's empire areas are schematic approximations, not historical boundaries.
-  * Strengths chart (slide 6) is a qualitative rating built from the script, not measured data.
+  * Strengths chart (slide 4) is a qualitative rating built from the script, not measured data.
   * Source line: Arrian, Anabasis of Alexander; Diodorus Siculus, Library, Book XVII.
 """
 import argparse
@@ -92,32 +91,31 @@ CITY = {"Pella": (22.52, 40.76), "Athens": (23.73, 37.98), "Sparta": (22.43, 37.
         "Susa": (48.25, 32.19), "Persepolis": (52.89, 29.93), "Erbil": (44.01, 36.19)}
 
 
-# ─────────────────────────────────────────────────────── 1. hook (13.6 s)
+# ─────────────────────────────────────────────────────── 1. hook (11.6 s)
 def s_hook(b, t):
     cv = b.cv
     header(b, t, "The wars of Alexander", "Gaugamela, 331 BCE",
            "Where Macedon and the Persian Empire met for the last time")
     m = FlatMap(b, (18, 25, 62, 46), (0, 450, 1080, 700), fade=70)
     land(cv, m, t)
-    region(cv, m, PERSIA, "blue", pr(t, 2.0, 1.2))
-    px, py = m.xy(49.0, 29.6)
-    T(b, "PERSIAN EMPIRE", px, py, "map_area", "blue", t, 2.6, align="center")
-    T(b, "the largest the world had yet seen", px, py + 34, "map_city", "muted", t, 3.0, align="center")
-    mx, my = m.xy(*CITY["Pella"])
-    dot(cv, mx, my, 8, "text", pr(t, 1.2), ring=True)
-    T(b, "MACEDON", mx, my - 28, "map_area", "text", t, 1.4, align="center")
-    arrow(cv, pts(m, [(23.5, 40.6), (31, 39.6), (38, 38.4), (42.4, 36.9)]), ramp(t, 5.0, 2.0), "orange", 7,
-          dashed=True)
     gx, gy = m.xy(*CITY["Gaugamela"])
-    dot(cv, gx, gy, 11, "orange", pr(t, 6.8), ring=True, pulse_t=t - 7.2)
-    T(b, "GAUGAMELA", gx, gy - 34, "map_area", "orange", t, 7.0, align="center")
-    T(b, "northern Mesopotamia", gx + 30, gy + 10, "map_city", "muted", t, 7.3)
-    T(b, "How Alexander of Macedon brought down *Achaemenid Persia*", L, 1300, "h2", "text", t, 9.6,
-      max_w=R - L, lh=1.15)
+    dot(cv, gx, gy, 11, "orange", pr(t, 1.4), ring=True, pulse_t=t - 1.8)
+    T(b, "GAUGAMELA", gx, gy - 34, "map_area", "orange", t, 1.6, align="center")
+    T(b, "northern Mesopotamia", gx + 30, gy + 10, "map_city", "muted", t, 1.9)
+    region(cv, m, PERSIA, "blue", pr(t, 3.6, 1.2))
+    px, py = m.xy(49.0, 29.6)
+    T(b, "PERSIAN EMPIRE", px, py, "map_area", "blue", t, 4.2, align="center")
+    T(b, "the largest the world had yet seen", px, py + 34, "map_city", "muted", t, 4.6, align="center")
+    mx, my = m.xy(*CITY["Pella"])
+    dot(cv, mx, my, 8, "text", pr(t, 7.0), ring=True)
+    T(b, "MACEDON", mx, my - 28, "map_area", "text", t, 7.2, align="center")
+    arrow(cv, pts(m, [(23.5, 40.6), (31, 39.6), (38, 38.4), (42.4, 36.9)]), ramp(t, 7.4, 1.8), "orange", 7,
+          dashed=True)
+    T(b, "How Alexander of Macedon brought down *Persia*", L, 1300, "h2", "text", t, 8.4, max_w=R - L, lh=1.15)
     source(b, t, "Areas schematic  ·  Coastlines: Natural Earth", 1.0)
 
 
-# ──────────────────────────────────────────────────── 2. context (19.2 s)
+# ──────────────────────────────────────────────────── 2. context (13.2 s)
 GREEKS = ["Pella", "Athens", "Thebes", "Corinth", "Argos", "Sparta"]
 
 
@@ -128,74 +126,43 @@ def s_context(b, t):
     land(cv, m, t)
     for k, n in enumerate(GREEKS):
         x, y = m.xy(*CITY[n])
-        dot(cv, x, y, 5, "orange", pr(t, 1.0 + k * 0.25, 0.4))
+        dot(cv, x, y, 5, "orange", pr(t, 0.6 + k * 0.2, 0.4))
     # the League ring draws around Greece
     cx, cy = m.xy(23, 38.9)
-    rp = ramp(t, 3.4, 1.4)
+    rp = ramp(t, 1.8, 1.2)
     if rp:
         arc = skia.Path(); arc.addArc(skia.Rect.MakeXYWH(cx - 95, cy - 95, 190, 190), -90, 360 * rp)
         p = P(col("orange", 0.9), "stroke", 4)
         p.setPathEffect(skia.DashPathEffect.Make([12, 8], 0))
         cv.drawPath(arc, p)
-    T(b, "LEAGUE OF CORINTH", cx, cy - 115, "map_area", "orange", t, 4.6, align="center")
-    region(cv, m, PERSIA, "blue", pr(t, 7.4, 1.2))
+    T(b, "LEAGUE OF CORINTH", cx, cy - 115, "map_area", "orange", t, 2.8, align="center")
+    region(cv, m, PERSIA, "blue", pr(t, 4.6, 1.2))
     px, py = m.xy(49, 33)
-    T(b, "PERSIAN EMPIRE", px, py, "map_area", "blue", t, 8.0, align="center")
-    T(b, "multi-ethnic superpower", px, py + 34, "map_city", "muted", t, 8.4, align="center")
-    rows = [(1.0, "PHILIP II", "orange", "Subdues the Greek city-states and binds them into one league"),
-            (7.4, "DARIUS III", "blue", "Rules the vast Persian Empire to the east")]
+    T(b, "PERSIAN EMPIRE", px, py, "map_area", "blue", t, 5.0, align="center")
+    T(b, "multi-ethnic superpower", px, py + 34, "map_city", "muted", t, 5.4, align="center")
+    rows = [(0.6, "PHILIP II", "orange", "Unites the Greek city-states under Macedon"),
+            (4.6, "DARIUS III", "blue", "Has spent decades bribing Greek rivals")]
     for k, (t0, name, c, txt) in enumerate(rows):
         y = 1110 + k * 120
         a = pr(t, t0)
         chip(b, name, L, y - 40, c, a)
         T(b, txt, L + 250, y, "body", "text", t, t0 + 0.2, max_w=R - L - 250, lh=1.2)
-    T(b, "A united, militarized Greece: an *existential threat*", L, 1400, "h2", "text", t, 14.0, max_w=R - L,
-      lh=1.15)
+    T(b, "The Greeks still wanted *revenge* for Athens", L, 1400, "h2", "text", t, 9.4, max_w=R - L, lh=1.15)
     source(b, t, "Areas schematic  ·  Coastlines: Natural Earth", 1.0)
 
 
-# ──────────────────────────────────────────────────── 3. causes (14.8 s)
-CAUSES = [(icon_coins, "Persian gold", "Decades of bribes and money for Greek rivals", ["ATHENS", "SPARTA"], 1.6),
-          (icon_swords, "Panhellenic revenge", "For Xerxes' invasion and the burning of Athens", ["480 BCE"], 6.4),
-          (icon_crown, "Macedonian ambition", "Land, security and wealth", [], 11.4)]
-
-
-def s_causes(b, t):
-    cv = b.cv
-    header(b, t, "Underlying causes", "Three grievances", "The forces pushing Macedon toward war with Persia")
-    for k, (ico, name, desc, chips, t0) in enumerate(CAUSES):
-        a = pr(t, t0, 0.6)
-        if not a:
-            continue
-        nxt = CAUSES[k + 1][4] if k + 1 < len(CAUSES) else 99
-        active = t < nxt
-        c = "orange" if active else "orange_dim"
-        y = 500 + k * 280
-        rr = skia.RRect.MakeRectXY(skia.Rect.MakeXYWH(L, y, R - L, 240), 12, 12)
-        cv.drawRRect(rr, P(col("bg_raised", a)))
-        cv.drawRRect(rr, P(col(c, (0.8 if active else 0.35) * a), "stroke", 2))
-        ico(cv, L + 90, y + 95, 96, col(c, a))
-        b.text(f"{k + 1}  {name}", L + 180, y + 80, "h2", "text" if active else "muted", alpha=a)
-        b.text(desc, L + 180, y + 130, "body", "text" if active else "muted", max_w=R - L - 210, lh=1.2, alpha=a)
-        xx = L + 180
-        for j, ch in enumerate(chips):
-            xx += chip(b, ch, xx, y + 160, c, pr(t, t0 + 1.2 + j * 0.4, 0.4)) + 16
-    T(b, "Old grudges, new *ambition*", L, 1400, "h2", "text", t, 12.6)
-    source(b, t, SOURCE, 1.0)
-
-
-# ──────────────────────────────────────────────────── 4. trigger (14.8 s)
+# ──────────────────────────────────────────────────── 3. trigger (14.8 s)
 def s_trigger(b, t):
     cv = b.cv
-    header(b, t, "Trigger and escalation", "The spark, 336 BCE", "Two years from an assassination to a war of conquest")
+    header(b, t, "Trigger and escalation", "The spark, 336 BCE", "From an assassination to a bid for the Persian throne")
     ax = L + 150
-    g = ramp(t, 0.6, 9.0)
+    g = ramp(t, 0.6, 7.6)
     cv.drawLine(ax, 520, ax, 520 + 520 * g, P(col("grid"), "stroke", 4))
-    events = [(0.8, "336 BCE", "Philip II is assassinated", "red", None),
-              (4.6, "", "Persia hopes Macedon will fall apart", "muted", None),
-              (7.0, "336–335", "Young Alexander seizes control", "text", None),
-              (9.6, "334 BCE", "He crosses into Asia", "orange", None)]
-    for k, (t0, yr, txt, c, _) in enumerate(events):
+    events = [(0.6, "336 BCE", "Philip II is assassinated", "red"),
+              (3.0, "", "Persia hopes Macedon will fall apart", "muted"),
+              (5.2, "336–335", "Young Alexander seizes control", "text"),
+              (7.6, "334 BCE", "He crosses into Asia", "orange")]
+    for k, (t0, yr, txt, c) in enumerate(events):
         y = 560 + k * 150
         a = pr(t, t0)
         if not a:
@@ -206,8 +173,8 @@ def s_trigger(b, t):
         T(b, txt, ax + 50, y, "h2" if yr else "body", "text" if c != "muted" else "muted", t, t0 + 0.1,
           max_w=R - ax - 50)
     # scope of the war
-    T(b, "SCOPE OF THE WAR", L, 1180, "kicker", "muted", t, 10.8, tracking=4, rise=0)
-    bars = [("Punitive expedition", 0.32, "orange_dim", 11.2), ("War of conquest", 1.0, "orange", 12.4)]
+    T(b, "SCOPE OF THE WAR", L, 1180, "kicker", "muted", t, 9.6, tracking=4, rise=0)
+    bars = [("Punitive expedition", 0.32, "orange_dim", 10.0), ("Bid for the Persian throne", 1.0, "orange", 12.0)]
     for k, (lab, f, c, t0) in enumerate(bars):
         y = 1220 + k * 110
         a = pr(t, t0, 0.4)
@@ -220,40 +187,10 @@ def s_trigger(b, t):
     source(b, t, SOURCE, 1.0)
 
 
-# ─────────────────────────────────────────────────── 5. objectives (22.8 s)
-ALEX_AIMS = [(1.2, "Liberate the Greek cities of Asia Minor", 0.30), (3.4, "Take revenge", 0.40),
-             (4.4, "Seize plunder", 0.50), (5.8, "Overthrow the Achaemenid dynasty", 0.80),
-             (7.6, "Rule as King of Asia", 1.0)]
-DAR_AIMS = [(10.6, "Crush the invader", 1.0), (16.4, "Save the empire", 0.70), (15.4, "Save the family", 0.50),
-            (14.4, "Save the throne", 0.35), (17.6, "Offer land and ransoms", 0.20)]
-
-
-def s_objectives(b, t):
-    cv = b.cv
-    header(b, t, "Political objectives", "Aims that grew and shrank", "Each bar is the scale of a war aim, start to finish")
-    cw = (R - L - 60) / 2
-    for side, (x0, name, c, aims, t0) in enumerate(((L, "ALEXANDER", "orange", ALEX_AIMS, 0.8),
-                                                    (L + cw + 60, "DARIUS III", "blue", DAR_AIMS, 10.2))):
-        T(b, name, x0, 490, "kicker", c, t, t0, tracking=4)
-        T(b, "aims expand" if side == 0 else "aims shrink", x0, 530, "meta", "muted", t, t0 + 0.2, rise=0)
-        for k, (ta, txt, f) in enumerate(aims):
-            y = 620 + k * 150
-            a = pr(t, ta)
-            if not a:
-                continue
-            b.text(txt, x0, y, "body", "text", max_w=cw, lh=1.15, alpha=a)
-            by = y + (50 if b.width(txt, "body") > cw else 18)
-            cv.drawRect(skia.Rect.MakeXYWH(x0, by, cw, 22), P(col("bg_raised", a)))
-            cv.drawRect(skia.Rect.MakeXYWH(x0, by, cw * f * ramp(t, ta, 0.8), 22), P(col(c, a)))
-    stamp(b, "REFUSED", L + cw + 60 + cw / 2, 1335, t, 20.4, "red", 50, -6)
-    T(b, "Alexander's aims *grew* with every victory", L, 1455, "h2", "text", t, 8.6, max_w=R - L)
-    source(b, t, SOURCE, 1.0)
-
-
-# ─────────────────────────────────────────────────── 6. strengths (24 s)
-STRENGTHS = [("MANPOWER", 95, 2.0, 25, 14.6), ("TREASURE", 95, 2.8, 25, 15.4), ("SEA POWER", 85, 3.6, 20, 16.2),
-             ("STRATEGIC DEPTH", 90, 4.6, 25, 16.6), ("PROFESSIONAL ARMY", 30, 7.6, 95, 18.4),
-             ("COHESION", 30, 9.2, 90, 19.6), ("COMMAND", 30, 10.6, 98, 21.4)]
+# ─────────────────────────────────────────────────── 4. strengths (15.2 s)
+STRENGTHS = [("MANPOWER", 95, 2.0, 25, 10.0), ("TREASURE", 95, 2.6, 25, 10.4), ("SEA POWER", 85, 3.2, 20, 10.8),
+             ("COHESION", 30, 6.0, 90, 12.6), ("PROFESSIONAL ARMY", 30, 6.6, 95, 12.0),
+             ("COMMAND", 30, 8.4, 98, 14.0)]
 
 
 def s_strengths(b, t):
@@ -263,7 +200,7 @@ def s_strengths(b, t):
     chip(b, "MACEDON", L + w1 + 20, 450, "orange", pr(t, 1.0, 0.4))
     bx, bw = L + 330, R - L - 330
     for k, (lab, pv, pt, mv, mt) in enumerate(STRENGTHS):
-        y = 580 + k * 112
+        y = 580 + k * 120
         T(b, lab, L, y + 36, "kicker", "muted", t, pt - 0.2, tracking=2, rise=0)
         for j, (v, t0, c) in enumerate(((pv, pt, "blue"), (mv, mt, "orange"))):
             a = pr(t, t0, 0.3)
@@ -272,17 +209,17 @@ def s_strengths(b, t):
             yy = y + j * 30
             cv.drawRect(skia.Rect.MakeXYWH(bx, yy, bw, 24), P(col("bg_raised", a)))
             cv.drawRect(skia.Rect.MakeXYWH(bx, yy, bw * v / 100 * ramp(t, t0, 0.8), 24), P(col(c, a)))
-    T(b, "Persia had the mass. Macedon had *the quality.*", L, 1420, "h2", "text", t, 20.0, max_w=R - L)
+    T(b, "Persia had the mass. Macedon had *the quality.*", L, 1420, "h2", "text", t, 13.2, max_w=R - L)
     source(b, t, "Qualitative ratings from the narration, not measured data", 1.0)
 
 
-# ──────────────────────────────────────────────────── 7. strategy (13.2 s)
+# ──────────────────────────────────── 5. strategy (12 s; runs ~1.7x fast to fit the short narration)
 def s_strategy(b, t):
     cv = b.cv
     header(b, t, "Strategy", "Speed against scale", "Macedon's fast thrust vs Persia's plan to envelop it")
     T(b, "MACEDON: MOVE FAST", L, 500, "kicker", "orange", t, 0.6, tracking=4)
-    nodes = [(220, "Decisive battles", icon_swords, 1.6), (540, "Seize treasuries", icon_coins, 3.0),
-             (860, "Before the money runs out", icon_crown, 4.6)]
+    nodes = [(220, "Decisive battles", icon_swords, 1.6), (540, "Enemy treasuries", icon_coins, 3.0),
+             (860, "Royal capitals", icon_crown, 4.6)]
     arrow(cv, [(L + 10, 700), (R - 10, 700)], ramp(t, 1.0, 4.4), "orange", 7)
     for x, lab, ico, t0 in nodes:
         a = pr(t, t0, 0.4)
@@ -585,28 +522,19 @@ def s_end(b, t):
 
 
 VO = {
-    "hook": "Gaugamela, 331 BCE. On one afternoon, on a dusty plain in northern Mesopotamia, the largest empire the "
-            "world had yet seen was broken. This is how Alexander of Macedon brought down Achaemenid Persia.",
-    "context": "By the 330s BCE, Philip the Second of Macedon had subdued the Greek city-states and bound them into "
-               "the League of Corinth. To the east lay the Persian Empire of Darius the Third — a vast, multi-ethnic "
-               "superpower that now saw a united, militarized Greece as an existential threat.",
-    "causes": "The grievances ran deep. For decades Persia had bribed and bankrolled Greek rivals like Athens and "
-              "Sparta. Panhellenic ideology demanded revenge for Xerxes' invasion and the burning of Athens. And "
-              "Macedon wanted land, security and wealth.",
-    "trigger": "The spark came in 336 BCE, when Philip was assassinated. Persia hoped Macedon would fall apart. "
-               "Instead, young Alexander seized control and, in 334, crossed into Asia — turning a punitive "
-               "expedition into a war of conquest.",
-    "objectives": "Alexander's goals grew with every victory: from liberating the Greek cities of Asia Minor, taking "
-                  "revenge and seizing plunder, to overthrowing the Achaemenid dynasty and ruling as King of Asia. "
-                  "Darius began by trying to crush the invader — and ended fighting to save his throne, his family "
-                  "and his empire, offering territory and ransoms that Alexander refused.",
-    "strengths": "On paper, Persia held every advantage: endless manpower, vast treasure, control of the sea and "
-                 "enormous strategic depth. But its army was a decentralized satrapal levy, divided by ethnicity and "
-                 "run by a rigid autocracy. Macedon was outnumbered, short of money and lacked a strong navy — yet "
-                 "it had a professional army, the phalanx, the Companion cavalry… and Alexander.",
-    "strategy": "So Alexander moved fast — seeking decisive battles and seizing treasuries before his money ran out. "
-                "Darius, after failing to contain him, gambled on one colossal army to envelop and annihilate the "
-                "Macedonians.",
+    "hook": "Gaugamela, 331 BCE. On one dusty afternoon in northern Mesopotamia, the largest empire the world had "
+            "yet seen was broken. This is how Alexander of Macedon brought down Persia.",
+    "context": "Philip the Second had united the Greek city-states under Macedon. Persia, under Darius the Third, had "
+               "spent decades bribing Greek rivals — and the Greeks still wanted revenge for Xerxes' burning of "
+               "Athens.",
+    "trigger": "In 336, Philip was assassinated. Persia hoped Macedon would fall apart. Instead, young Alexander "
+               "seized control, and in 334 crossed into Asia. What began as a punitive expedition became a bid for "
+               "the Persian throne itself.",
+    "strengths": "On paper, Persia had every advantage: manpower, money and the sea. But its army was a loose levy "
+                 "of subject peoples under a rigid autocracy. Macedon had less of everything — except a professional "
+                 "army, and Alexander.",
+    "strategy": "So Alexander moved fast, chasing decisive battles and enemy treasuries. Darius bet everything on one "
+                "colossal army.",
     "phases": "Three battles decided the war. At the Granicus in 334, Alexander opened Asia Minor and began taking "
               "the ports that blunted Persian sea power. At Issus in 333, he routed Darius and captured the royal "
               "family, opening the road to the Levant and Egypt. Then, in 331, came Gaugamela.",
@@ -629,16 +557,13 @@ VO = {
 }
 
 SCENES = [
-    Scene(s_hook, 13.6, [(1.2, "pop"), (2.0, "rise"), (6.8, "pop"), (9.6, "hit_soft")], VO["hook"]),
-    Scene(s_context, 19.2, [(1.0, "tick"), (1.5, "tick"), (2.0, "tick"), (3.4, "rise"), (7.4, "rise"),
-                            (14.0, "hit_soft")], VO["context"]),
-    Scene(s_causes, 14.8, [(1.6, "pop"), (6.4, "pop"), (11.4, "pop")], VO["causes"]),
-    Scene(s_trigger, 14.8, [(0.8, "hit"), (7.0, "tick"), (9.6, "pop"), (12.4, "rise")], VO["trigger"]),
-    Scene(s_objectives, 22.8, [(1.2, "tick"), (5.8, "tick"), (7.6, "pop"), (10.6, "tick"), (20.4, "hit")],
-          VO["objectives"]),
-    Scene(s_strengths, 24.0, [(2.0, "tick"), (7.6, "tick"), (14.6, "tick"), (18.4, "rise"), (21.4, "pop")],
+    Scene(s_hook, 11.6, [(1.4, "pop"), (3.6, "rise"), (7.0, "tick"), (8.4, "hit_soft")], VO["hook"]),
+    Scene(s_context, 13.2, [(0.6, "tick"), (1.0, "tick"), (1.8, "rise"), (4.6, "rise"), (9.4, "hit_soft")],
+          VO["context"]),
+    Scene(s_trigger, 14.8, [(0.6, "hit"), (5.2, "tick"), (7.6, "pop"), (12.0, "rise")], VO["trigger"]),
+    Scene(s_strengths, 15.2, [(2.0, "tick"), (6.0, "tick"), (10.0, "tick"), (12.0, "rise"), (14.0, "pop")],
           VO["strengths"]),
-    Scene(s_strategy, 13.2, [(1.6, "pop"), (3.0, "pop"), (4.6, "pop"), (8.6, "rise")], VO["strategy"]),
+    Scene(s_strategy, 12.0, [(1.6, "pop"), (3.0, "pop"), (4.6, "pop"), (8.6, "rise")], VO["strategy"]),
     Scene(s_phases, 19.6, [(1.0, "rise"), (2.6, "pop"), (8.4, "pop"), (16.4, "hit_soft")], VO["phases"]),
     Scene(s_battle, 22.8, [(2.4, "tick"), (5.0, "rise"), (12.2, "pop"), (13.6, "rise"), (18.6, "hit")],
           VO["battle"]),
